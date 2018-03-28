@@ -1,0 +1,15 @@
+# Network simulation tool configuration
+
+[server]
+host = 127.0.0.1
+port = 3724
+gateway =  "Ember" # leave blank for random selection
+
+[client]
+threads = 0 # 0 to let the tool choose
+max_connections = 0
+retry = true
+
+[metrics]
+host = 127.0.0.1
+port = 8000
