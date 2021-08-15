@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Ember
+ * Copyright (c) 2015 - 2021 Ember
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34,6 +34,8 @@ namespace ember::log {
 class Logger::impl final {
 	friend class Logger;
 
+	static constexpr std::size_t BUFFER_RESERVE = 512;
+
 	Severity severity_ = Severity::DISABLED;
 	Filter filter_ = Filter(0);
 	std::vector<std::unique_ptr<Sink>> sinks_;
@@ -46,7 +48,7 @@ class Logger::impl final {
 		buffer_.second.push_back('\n');
 		worker_.queue_.enqueue(std::move(buffer_));
 		worker_.signal();
-		buffer_.second.reserve(128);
+		buffer_.second.reserve(BUFFER_RESERVE);
 	}
 
 	void finalise_sync() {
@@ -55,8 +57,12 @@ class Logger::impl final {
 					(std::move(buffer_.first), std::move(buffer_.second), &sem_);
 		worker_.queue_sync_.enqueue(std::move(r));
 		worker_.signal();
-		buffer_.second.reserve(128);
+		buffer_.second.reserve(BUFFER_RESERVE);
 		sem_.wait();
+	}
+
+	std::vector<char>* get_buffer() {
+		return &buffer_.second;
 	}
 
 public:
