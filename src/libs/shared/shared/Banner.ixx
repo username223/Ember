@@ -1,19 +1,16 @@
-/*
- * Copyright (c) 2014, 2017 Ember
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
+module;
 
-#include "Banner.h"
 #include "Version.h"
 #include "util/ConsoleColour.h"
 #include <iostream>
 
+export module Shared.Banner;
+
+export import <string_view>;
+
 namespace ember {
 
-void print_banner(std::string_view display_name) {
+export void print_banner(std::string_view display_name) {
 	util::ConsoleColour console;
 
 	console.set(util::Colour::DARK_GREY);
@@ -39,4 +36,4 @@ void print_banner(std::string_view display_name) {
 	std::cout << display_name << ", v" << version::VERSION << " (" << version::GIT_HASH << ")\n\n";
 }
 
-}
+} // ember
